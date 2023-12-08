@@ -1,5 +1,4 @@
 import os
-import random
 import sys
 
 import pygame
@@ -29,38 +28,37 @@ def load_image(name, colorkey=None):
 
 class Bomb(pygame.sprite.Sprite):
     image = load_image("sword.png")
-    image_boom = load_image("boom.png")
 
     def __init__(self, *group):
         # НЕОБХОДИМО вызвать конструктор родительского класса Sprite. Это очень важно !!!
         super().__init__(*group)
         self.image = Bomb.image
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(width)
-        self.rect.y = random.randrange(height)
+        self.rect.x = 50
+        self.rect.y = 50
 
     def update(self, *args):
-        self.rect = self.rect.move(random.randrange(3) - 1, random.randrange(3) - 1)
-        if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-            self.image = self.image_boom
+        if args and args[0].type == pygame.MOUSEMOTION:
+            self.rect.x = args[0].pos[0]
+            self.rect.y = args[0].pos[1]
 
 
 # группа, содержащая все спрайты
 all_sprites = pygame.sprite.Group()
 
-for i in range(20):
+for i in range(1):
     # нам уже не нужно даже имя объекта!
     Bomb(all_sprites)
 
-
 running = True
+pygame.mouse.set_visible(False)
 while running:
     clock.tick(30)
     all_sprites.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEMOTION:
             all_sprites.update(event)
 
     screen.fill(pygame.Color("white"))
