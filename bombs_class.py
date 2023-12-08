@@ -52,6 +52,7 @@ for i in range(20):
     # нам уже не нужно даже имя объекта!
     Bomb(all_sprites)
 
+
 running = True
 while running:
     clock.tick(30)
